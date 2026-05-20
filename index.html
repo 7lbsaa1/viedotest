@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مشغل الفيديو الخاص</title>
+    <title>المشغل الاحترافي الذكي</title>
     <style>
         body {
-            background: url('back.jpg') no-repeat center center fixed;
+            background: linear-gradient(135deg, rgba(15,15,15,0.95), rgba(30,30,30,0.9)), url('back.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             flex-direction: column;
@@ -14,32 +14,41 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff;
+            overflow: hidden;
         }
         .video-title {
-            font-size: 26px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 25px;
             text-align: center;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+            letter-spacing: 0.5px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
         }
         .player-container {
             position: relative;
-            width: 90%;
-            max-width: 820px;
+            width: 92%;
+            max-width: 850px;
             aspect-ratio: 16 / 9;
             background-color: #000;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.85);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: cursor 0.3s ease;
+        }
+        /* إخفاء الماوس عند اختفاء عناصر التحكم */
+        .player-container.hide-controls {
+            cursor: none;
         }
         .iframe-wrapper {
             position: absolute;
-            top: -14%; /* زيادة الإزاحة لضمان حجب الصورة والاسم كلياً */
+            top: -14%;
             left: 0;
             width: 100%;
-            height: 128%; 
+            height: 128%;
+            pointer-events: none;
         }
         #youtube-player {
             width: 100%;
@@ -51,64 +60,101 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% - 55px);
+            height: 100%;
             background: transparent;
             z-index: 10;
-            cursor: pointer; /* جعلها مؤشر ضغط للنقر على الفيديو */
+            cursor: pointer;
         }
+        /* تصميم شريط التحكم الزجاجي الاحترافي */
         .custom-controls {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 55px;
-            background: rgba(15, 15, 15, 0.92);
-            backdrop-filter: blur(8px);
+            height: 65px;
+            background: linear-gradient(transparent, rgba(10,10,10,0.95));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 25px;
             box-sizing: border-box;
             z-index: 20;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* حالة الاختفاء التدريجي النقي */
+        .player-container.hide-controls .custom-controls {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
         }
         .controls-right, .controls-left {
             display: flex;
             align-items: center;
+            gap: 15px;
         }
         .control-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.08);
             border: none;
             color: #fff;
             font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-left: 15px;
-            transition: color 0.2s;
+            transition: all 0.2s ease;
         }
         .control-btn:hover {
-            color: #00adb5;
+            background: #00adb5;
+            box-shadow: 0 0 12px rgba(0, 173, 181, 0.4);
         }
+        /* تحديث وتطوير شريط الفيديو الاحترافي */
         .progress-container {
             flex-grow: 1;
-            margin: 0 20px;
+            margin: 0 25px;
             display: flex;
             align-items: center;
             position: relative;
             cursor: pointer;
-            height: 100%; /* تمديد الطول لضمان حساب دقيق ومريح للمساحة */
+            height: 20px;
         }
         .progress-bar {
             width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.18);
-            border-radius: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             position: relative;
+            transition: height 0.2s ease;
+        }
+        .progress-container:hover .progress-bar {
+            height: 6px; /* يتمدد عند التمرير */
         }
         .progress-filled {
             height: 100%;
             background: #00adb5;
             width: 0%;
-            border-radius: 4px;
+            border-radius: 10px;
+            position: relative;
+        }
+        /* المؤشر الدائري المتطور */
+        .progress-filled::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+        .progress-container:hover .progress-filled::after {
+            transform: translateY(-50%) scale(1); /* يظهر فقط عند الحوسة */
         }
     </style>
 </head>
@@ -121,7 +167,7 @@
     <div class="iframe-wrapper">
         <div id="youtube-player"></div>
     </div>
-    <div class="custom-controls">
+    <div class="custom-controls" id="controls-panel">
         <div class="controls-right">
             <button class="control-btn" id="play-pause-btn">تشغيل</button>
             <button class="control-btn" id="mute-btn">كتم الصوت</button>
@@ -137,7 +183,6 @@
     </div>
 </div>
 
-<!-- استدعاء المكتبة والسكربت المعمى المنفصل -->
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="secure-player.js"></script>
 
