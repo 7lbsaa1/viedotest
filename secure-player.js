@@ -1,4 +1,22 @@
-let _0x4f12, _0x8a9c, _0x7b8d; const _0x1a2b = 'joEIk5UxcPI';
+// جدار حماية لمنع لوحة المفاتيح واختصارات الفحص F12
+window['addEventListener']('keydown', function (_0xkb) {
+    if (_0xkb['keyCode'] === 0x7B || // F12
+        (_0xkb['ctrlKey'] && _0xkb['shiftKey'] && (_0xkb['keyCode'] === 0x49 || _0xkb['keyCode'] === 0x4A)) || // Ctrl+Shift+I / J
+        (_0xkb['ctrlKey'] && _0xkb['keyCode'] === 0x55)) { // Ctrl+U
+        _0xkb['preventDefault']();
+        return false;
+    }
+});
+
+// منع الضغط المطول على الهواتف والأجهزة اللوحية كلياً لمنع القوائم المنبثقة
+window['addEventListener']('contextmenu', function (_0xcm) {
+    _0xcm['preventDefault']();
+    return false;
+});
+
+let _0x4f12, _0x8a9c, _0x7b8d; 
+const _0x1a2b = 'joEIk5UxcPI';
+
 function onYouTubeIframeAPIReady() {
     _0x4f12 = new YT['Player']('youtube-player', {
         'videoId': _0x1a2b,
@@ -10,6 +28,7 @@ function onYouTubeIframeAPIReady() {
         'events': { 'onStateChange': _0x3b9a, 'onReady': _0x5c2d }
     });
 }
+
 function _0x5c2d(_0x7f1a) {
     const _0x11ab = document['getElementById']('play-pause-btn'),
           _0x22cd = document['getElementById']('mute-btn'),
@@ -18,28 +37,30 @@ function _0x5c2d(_0x7f1a) {
           _0x55bc = document['getElementById']('progress-timeline'),
           _0x66de = document['getElementById']('vid-mask');
 
-    // دالة إخفاء وإظهار شريط التحكم تلقائياً
     const _0x82cc = () => {
         _0x44fa['classList']['remove']('hide-controls');
         clearTimeout(_0x7b8d);
         if (_0x4f12 && _0x4f12['getPlayerState']() === 0x1) {
             _0x7b8d = setTimeout(() => {
                 _0x44fa['classList']['add']('hide-controls');
-            }, 0xbb8); // الاختفاء بعد 3 ثوانٍ (3000ms) من الثبات
+            }, 0xbb8);
         }
     };
 
     _0x44fa['addEventListener']('mousemove', _0x82cc);
-    _0x44fa['addEventListener']('click', _0x82cc);
+    _0x44fa['addEventListener']('touchstart', _0x82cc, {passive: true});
 
-    const _0x77ef = () => {
+    const _0x77ef = (_0xev) => {
+        if(_0xev) _0xev['preventDefault']();
         const _0x99ab = _0x4f12['getPlayerState']();
         if (_0x99ab === 0x1) {
-            _0x4f12['pauseVideo'](); _0x11ab['innerText'] = 'تشغيل';
+            _0x4f12['pauseVideo'](); 
+            _0x11ab['innerText'] = 'تشغيل';
             clearInterval(_0x8a9c);
             _0x44fa['classList']['remove']('hide-controls');
         } else {
-            _0x4f12['playVideo'](); _0x11ab['innerText'] = 'إيقاف مؤقت';
+            _0x4f12['playVideo'](); 
+            _0x11ab['innerText'] = 'إيقاف مؤقت';
             _0x98bc();
             _0x82cc();
         }
@@ -58,10 +79,10 @@ function _0x5c2d(_0x7f1a) {
 
     _0x33ef['addEventListener']('click', () => {
         if (!document['fullscreenElement']) {
-            if (_0x44fa['requestFullscreen']) _0x44fa['requestFullscreen']();
+            if (_0x44fa['requestFullscreen']) { _0x44fa['requestFullscreen'](); }
             _0x33ef['innerText'] = 'خروج 🗗';
         } else {
-            if (document['exitFullscreen']) document['exitFullscreen']();
+            if (document['exitFullscreen']) { document['exitFullscreen'](); }
             _0x33ef['innerText'] = 'ملء الشاشة ⛶';
         }
     });
@@ -78,7 +99,9 @@ function _0x5c2d(_0x7f1a) {
         }
     });
 }
+
 function _0x98bc() { _0x8a9c = setInterval(_0x192a, 0x1f4); }
+
 function _0x192a() {
     if (_0x4f12 && _0x4f12['getCurrentTime']) {
         const _0x22ff = _0x4f12['getCurrentTime'](),
@@ -89,6 +112,7 @@ function _0x192a() {
         }
     }
 }
+
 function _0x3b9a(_0x55aa) {
     if (_0x55aa['data'] === YT['PlayerState']['ENDED']) {
         document['getElementById']('play-pause-btn')['innerText'] = 'إعادة تشغيل';
