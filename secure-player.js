@@ -1,4 +1,4 @@
-let _0x4f12, _0x8a9c; const _0x1a2b = 'joEIk5UxcPI';
+let _0x4f12, _0x8a9c, _0x7b8d; const _0x1a2b = 'joEIk5UxcPI';
 function onYouTubeIframeAPIReady() {
     _0x4f12 = new YT['Player']('youtube-player', {
         'videoId': _0x1a2b,
@@ -18,19 +18,35 @@ function _0x5c2d(_0x7f1a) {
           _0x55bc = document['getElementById']('progress-timeline'),
           _0x66de = document['getElementById']('vid-mask');
 
+    // دالة إخفاء وإظهار شريط التحكم تلقائياً
+    const _0x82cc = () => {
+        _0x44fa['classList']['remove']('hide-controls');
+        clearTimeout(_0x7b8d);
+        if (_0x4f12 && _0x4f12['getPlayerState']() === 0x1) {
+            _0x7b8d = setTimeout(() => {
+                _0x44fa['classList']['add']('hide-controls');
+            }, 0xbb8); // الاختفاء بعد 3 ثوانٍ (3000ms) من الثبات
+        }
+    };
+
+    _0x44fa['addEventListener']('mousemove', _0x82cc);
+    _0x44fa['addEventListener']('click', _0x82cc);
+
     const _0x77ef = () => {
         const _0x99ab = _0x4f12['getPlayerState']();
         if (_0x99ab === 0x1) {
             _0x4f12['pauseVideo'](); _0x11ab['innerText'] = 'تشغيل';
             clearInterval(_0x8a9c);
+            _0x44fa['classList']['remove']('hide-controls');
         } else {
             _0x4f12['playVideo'](); _0x11ab['innerText'] = 'إيقاف مؤقت';
             _0x98bc();
+            _0x82cc();
         }
     };
 
     _0x11ab['addEventListener']('click', _0x77ef);
-    _0x66de['addEventListener']('click', _0x77ef); // النقر على جسم الفيديو للتشغيل والإيقاف
+    _0x66de['addEventListener']('click', _0x77ef);
 
     _0x22cd['addEventListener']('click', () => {
         if (_0x4f12['isMuted']()) {
@@ -50,10 +66,9 @@ function _0x5c2d(_0x7f1a) {
         }
     });
 
-    // حل مشكلة التقديم والتأخير العكسي بالاعتماد على مصفوفة الأبعاد الدقيقة للمتصفح
     _0x55bc['addEventListener']('click', (_0xe321) => {
         const _0xbc12 = _0x55bc['getBoundingClientRect']();
-        const _0xac45 = _0xe321['clientX'] - _0xbc12['left']; // الحساب من بداية حافة العنصر لليمين بدقة
+        const _0xac45 = _0xe321['clientX'] - _0xbc12['left'];
         const _0xdc78 = _0xbc12['width'];
         const _0xfc89 = _0x4f12['getDuration']();
         if (_0xfc89) {
@@ -78,6 +93,7 @@ function _0x3b9a(_0x55aa) {
     if (_0x55aa['data'] === YT['PlayerState']['ENDED']) {
         document['getElementById']('play-pause-btn')['innerText'] = 'إعادة تشغيل';
         clearInterval(_0x8a9c);
+        document['getElementById']('main-player-container')['classList']['remove']('hide-controls');
         document['getElementById']('progress-current')['style']['width'] = '0%';
     } else if (_0x55aa['data'] === YT['PlayerState']['PLAYING']) {
         _0x98bc();
