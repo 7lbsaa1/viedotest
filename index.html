@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشغل الفيديو الخاص</title>
+    <style>
+        body {
+            background: url('back.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+            color: #fff;
+        }
+        .video-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.8);
+        }
+        .player-container {
+            position: relative;
+            width: 90%;
+            max-width: 820px;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.85);
+        }
+        .iframe-wrapper {
+            position: absolute;
+            top: -14%; /* زيادة الإزاحة لضمان حجب الصورة والاسم كلياً */
+            left: 0;
+            width: 100%;
+            height: 128%; 
+        }
+        #youtube-player {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 55px);
+            background: transparent;
+            z-index: 10;
+            cursor: pointer; /* جعلها مؤشر ضغط للنقر على الفيديو */
+        }
+        .custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 55px;
+            background: rgba(15, 15, 15, 0.92);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 20;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .controls-right, .controls-left {
+            display: flex;
+            align-items: center;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: color 0.2s;
+        }
+        .control-btn:hover {
+            color: #00adb5;
+        }
+        .progress-container {
+            flex-grow: 1;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            height: 100%; /* تمديد الطول لضمان حساب دقيق ومريح للمساحة */
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 4px;
+            position: relative;
+        }
+        .progress-filled {
+            height: 100%;
+            background: #00adb5;
+            width: 0%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-title">إيه سبب انفصالي عن تريبلز !</div>
+
+<div class="player-container" id="main-player-container" oncontextmenu="return false;">
+    <div class="video-overlay" id="vid-mask"></div>
+    <div class="iframe-wrapper">
+        <div id="youtube-player"></div>
+    </div>
+    <div class="custom-controls">
+        <div class="controls-right">
+            <button class="control-btn" id="play-pause-btn">تشغيل</button>
+            <button class="control-btn" id="mute-btn">كتم الصوت</button>
+        </div>
+        <div class="progress-container" id="progress-timeline">
+            <div class="progress-bar">
+                <div class="progress-filled" id="progress-current"></div>
+            </div>
+        </div>
+        <div class="controls-left">
+            <button class="control-btn" id="fullscreen-btn">ملء الشاشة ⛶</button>
+        </div>
+    </div>
+</div>
+
+<!-- استدعاء المكتبة والسكربت المعمى المنفصل -->
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="secure-player.js"></script>
+
+</body>
+</html>
