@@ -2,11 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المشغل الاحترافي الذكي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>المشغل الآمن المحمي</title>
     <style>
+        /* منع اختيار النصوص والنسخ ومنع القوائم المنبثقة على الهواتف */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none; /* منع الضغط المطول في iOS */
+            -webkit-user-select: none; /* منع الاختيار في Safari */
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
         body {
-            background: linear-gradient(135deg, rgba(15,15,15,0.95), rgba(30,30,30,0.9)), url('back.jpg') no-repeat center center fixed;
+            background: linear-gradient(135deg, rgba(10,10,10,0.96), rgba(25,25,25,0.93)), url('back.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             flex-direction: column;
@@ -14,155 +25,168 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             color: #fff;
             overflow: hidden;
         }
+
         .video-title {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             margin-bottom: 25px;
             text-align: center;
-            letter-spacing: 0.5px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            text-shadow: 0 4px 12px rgba(0,0,0,0.9);
         }
+
+        /* حاوية العرض الذهبية لمنع ظهور حواف يوتيوب */
         .player-container {
             position: relative;
             width: 92%;
-            max-width: 850px;
+            max-width: 840px;
             aspect-ratio: 16 / 9;
             background-color: #000;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.95);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: cursor 0.3s ease;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        /* إخفاء الماوس عند اختفاء عناصر التحكم */
+
         .player-container.hide-controls {
             cursor: none;
         }
+
+        /* تعديل النسبة بدقة متناهية (الحل الجذري للاختفاء) */
         .iframe-wrapper {
             position: absolute;
-            top: -14%;
+            top: -11%; 
             left: 0;
             width: 100%;
-            height: 128%;
-            pointer-events: none;
+            height: 122%;
+            pointer-events: none; /* منع أي تفاعل مباشر مع مشغل يوتيوب الخلفي */
         }
+
         #youtube-player {
             width: 100%;
             height: 100%;
             border: none;
         }
+
+        /* طبقة الحماية والتفاعل السطحي */
         .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
+            background: rgba(0,0,0,0.001); /* قيمة شفافة جداً لإجبار المتصفح على قراءتها كجسم صلب */
             z-index: 10;
             cursor: pointer;
         }
-        /* تصميم شريط التحكم الزجاجي الاحترافي */
+
+        /* شريط التحكم السفلي */
         .custom-controls {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 65px;
-            background: linear-gradient(transparent, rgba(10,10,10,0.95));
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            height: 60px;
+            background: linear-gradient(transparent, rgba(12,12,12,0.98));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 25px;
+            padding: 0 20px;
             box-sizing: border-box;
             z-index: 20;
-            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
             opacity: 1;
             transform: translateY(0);
         }
-        /* حالة الاختفاء التدريجي النقي */
+
         .player-container.hide-controls .custom-controls {
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(12px);
             pointer-events: none;
         }
+
         .controls-right, .controls-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
+
         .control-btn {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             border: none;
             color: #fff;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 15px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
+
         .control-btn:hover {
             background: #00adb5;
-            box-shadow: 0 0 12px rgba(0, 173, 181, 0.4);
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.5);
         }
-        /* تحديث وتطوير شريط الفيديو الاحترافي */
+
         .progress-container {
             flex-grow: 1;
-            margin: 0 25px;
+            margin: 0 20px;
             display: flex;
             align-items: center;
             position: relative;
             cursor: pointer;
-            height: 20px;
+            height: 15px;
         }
+
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            border-radius: 6px;
             position: relative;
-            transition: height 0.2s ease;
+            transition: height 0.15s ease;
         }
+
         .progress-container:hover .progress-bar {
-            height: 6px; /* يتمدد عند التمرير */
+            height: 7px;
         }
+
         .progress-filled {
             height: 100%;
             background: #00adb5;
             width: 0%;
-            border-radius: 10px;
+            border-radius: 6px;
             position: relative;
         }
-        /* المؤشر الدائري المتطور */
+
         .progress-filled::after {
             content: '';
             position: absolute;
-            right: -6px;
+            right: -5px;
             top: 50%;
             transform: translateY(-50%) scale(0);
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #fff;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            transition: transform 0.2s ease;
+            transition: transform 0.15s ease;
         }
+
         .progress-container:hover .progress-filled::after {
-            transform: translateY(-50%) scale(1); /* يظهر فقط عند الحوسة */
+            transform: translateY(-50%) scale(1);
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;"> <!-- حظر الزر الأيمن على مستوى الصفحة بالكامل -->
 
 <div class="video-title">إيه سبب انفصالي عن تريبلز !</div>
 
-<div class="player-container" id="main-player-container" oncontextmenu="return false;">
+<div class="player-container" id="main-player-container">
     <div class="video-overlay" id="vid-mask"></div>
     <div class="iframe-wrapper">
         <div id="youtube-player"></div>
