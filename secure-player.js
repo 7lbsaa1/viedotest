@@ -1,14 +1,12 @@
-// جدار حماية لمنع لوحة المفاتيح واختصارات الفحص F12
 window['addEventListener']('keydown', function (_0xkb) {
-    if (_0xkb['keyCode'] === 0x7B || // F12
-        (_0xkb['ctrlKey'] && _0xkb['shiftKey'] && (_0xkb['keyCode'] === 0x49 || _0xkb['keyCode'] === 0x4A)) || // Ctrl+Shift+I / J
-        (_0xkb['ctrlKey'] && _0xkb['keyCode'] === 0x55)) { // Ctrl+U
+    if (_0xkb['keyCode'] === 0x7B || 
+        (_0xkb['ctrlKey'] && _0xkb['shiftKey'] && (_0xkb['keyCode'] === 0x49 || _0xkb['keyCode'] === 0x4A)) || 
+        (_0xkb['ctrlKey'] && _0xkb['keyCode'] === 0x55)) { 
         _0xkb['preventDefault']();
         return false;
     }
 });
 
-// منع الضغط المطول على الهواتف والأجهزة اللوحية كلياً لمنع القوائم المنبثقة
 window['addEventListener']('contextmenu', function (_0xcm) {
     _0xcm['preventDefault']();
     return false;
